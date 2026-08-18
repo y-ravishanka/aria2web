@@ -1,5 +1,3 @@
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
 import {
     Card,
     CardAction,
@@ -11,6 +9,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useInstances } from "@/services/useInstances"
+import { Separator } from "@/components/ui/separator";
 
 // Sample metrics — replace with real data.
 const stats = [
@@ -30,10 +29,20 @@ export function Home() {
     return (
         <div className="flex flex-col gap-6 p-6">
             <header className="flex items-center gap-2">
-                <SidebarTrigger />
-                <Separator orientation="vertical" className="h-4" />
-                <h1 className="text-lg font-semibold">Home</h1>
+                <h1 className="text-lg font-semibold border-l-4 ps-2">Home</h1>
             </header>
+
+            <div className="flex gap-2 flex-col lg:flex-row justify-center items-center">
+                <Card className="bg-amber-300 max-w-xs lg:w-3/12">
+                    <CardHeader>
+                        <CardTitle>Aria2 Instances</CardTitle>
+
+                    </CardHeader>
+                </Card>
+                <div className="bg-green-400 lg:w-9/12">
+                    card section
+                </div>
+            </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {stats.map((stat) => (

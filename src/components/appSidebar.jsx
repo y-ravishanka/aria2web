@@ -1,101 +1,72 @@
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 import {
-    Home,
-    Inbox,
-    Search,
-    Settings,
-    User,
+    Plus,
     LayoutDashboard,
-    BarChart3,
-    HelpCircle,
+    Download,
+    Clock,
+    CheckCircle2,
+    Settings,
 } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from "@/components/ui/sidebar"
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
-// Sample nav data — replace hrefs/labels/icons as needed.
-const navMain = [
-    { title: "Home", url: "/", icon: Home },
-    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-    { title: "Inbox", url: "/login", icon: Inbox },
-    { title: "Search", url: "/search", icon: Search },
-    { title: "Reports", url: "/reports", icon: BarChart3 },
-]
-
-const navSecondary = [
-    { title: "Account", url: "/account", icon: User },
+const navItems = [
+    { title: "Dashboard", url: "/", icon: LayoutDashboard, end: true },
+    { title: "Downloading", url: "/downloading", icon: Download },
+    { title: "Pending", url: "/pending", icon: Clock },
+    { title: "Done / Stopped", url: "/completed", icon: CheckCircle2 },
     { title: "Settings", url: "/settings", icon: Settings },
-    { title: "Help", url: "/help", icon: HelpCircle },
 ]
+
+const iconButtonClass =
+    "flex size-10 items-center justify-center rounded-md text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
 
 const AppSidebar = () => {
     return (
-        <Sidebar>
-            <SidebarHeader>
-                <div className="flex items-center gap-2 px-2 py-1.5">
-                    <div className="flex size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                        <LayoutDashboard className="size-4" />
-                    </div>
-                    <span className="text-sm font-semibold">Aria2Web</span>
-                </div>
-            </SidebarHeader>
+        <aside className="flex h-screen w-14 shrink-0 flex-col items-center gap-2 border-r bg-sidebar py-3 text-sidebar-foreground">
+            <Tooltip>
+                <TooltipTrigger
+                    className={cn(iconButtonClass, "cursor-not-allowed opacity-60")}
+                    disabled
+                >
+                    <Plus className="size-5" />
+                </TooltipTrigger>
+                <TooltipContent side="right">Add (coming soon)</TooltipContent>
+            </Tooltip>
 
-            <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupLabel>Platform</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {navMain.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton render={<Link to={item.url} />}>
-                                        <item.icon />
-                                        <span>{item.title}</span>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+            <div className="my-1 h-px w-6 bg-sidebar-border" />
 
-                <SidebarGroup>
-                    <SidebarGroupLabel>General</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {navSecondary.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton render={<Link to={item.url} />}>
-                                        <item.icon />
-                                        <span>{item.title}</span>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-            </SidebarContent>
-
-            <SidebarFooter>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton render={<Link to="/account" />}>
-                            <User />
-                            <span>Guest User</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarFooter>
-        </Sidebar>
+            <nav className="flex flex-col items-center gap-2">
+                {navItems.map((item) => (
+                    <Tooltip key={item.title}>
+                        <TooltipTrigger
+                            render={
+                                <NavLink
+                                    to={item.url}
+                                    end={item.end}
+                                    className={({ isActive }) =>
+                                        cn(
+                                            iconButtonClass,
+                                            isActive &&
+                                            "bg-sidebar-accent text-sidebar-accent-foreground"
+                                        )
+                                    }
+                                />
+                            }
+                        >
+                            <item.icon className="size-5" />
+                        </TooltipTrigger>
+                        <TooltipContent side="right">{item.title}</TooltipContent>
+                    </Tooltip>
+                ))}
+            </nav>
+        </aside>
     );
 };
 
