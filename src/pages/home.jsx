@@ -1,86 +1,102 @@
-import {
-    Card,
-    CardAction,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { ChevronUp, ChevronDown, Plus, Bold } from "lucide-react"
 import { useInstances } from "@/services/useInstances"
-import { Separator } from "@/components/ui/separator";
-
-// Sample metrics — replace with real data.
-const stats = [
-    { label: "Total Users", value: "1,204" },
-    { label: "Active Sessions", value: "58" },
-    { label: "Revenue", value: "$12,430" },
-    { label: "Open Tickets", value: "9" },
-]
+import { Card, CardAction, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import AddInstance from "@/components/addInstance";
 
 export function Home() {
     const { instances, addInstance } = useInstances();
+    const [expandedId, setExpandedId] = useState(null);
 
     const add = () => {
         addInstance({ name: 'name here', domain: 'lkdyr.com', updatedAt: new Date() });
     };
 
+    const toggle = (id) => {
+        setExpandedId((current) => (current === id ? null : id));
+    };
+
     return (
-        <div className="flex flex-col gap-6 p-6">
+        <div className="flex flex-col gap-4 p-4 sm:gap-6 sm:p-6">
             <header className="flex items-center gap-2">
                 <h1 className="text-lg font-semibold border-l-4 ps-2">Home</h1>
             </header>
 
-            <div className="flex gap-2 flex-col lg:flex-row justify-center items-center">
-                <Card className="bg-amber-300 max-w-xs lg:w-3/12">
+            <div className="flex gap-4 flex-col lg:flex-row sm:gap-6">
+                <Card className="flex flex-col gap-2 w-full lg:w-3/12">
                     <CardHeader>
-                        <CardTitle>Aria2 Instances</CardTitle>
-
+                        <CardTitle className="font-bold text-lg">
+                            Instances
+                        </CardTitle>
+                        <CardDescription>
+                            Aria2 Server Instances.
+                        </CardDescription>
+                        <CardAction>
+                            <AddInstance />
+                        </CardAction>
                     </CardHeader>
                 </Card>
-                <div className="bg-green-400 lg:w-9/12">
-                    card section
+
+                {/* <div className="flex flex-col gap-2 w-full lg:w-3/12">
+
+
+                    <div className="rounded-xl border overflow-hidden">
+                        {instances.map((instance) => {
+                            const isExpanded = expandedId === instance.id;
+                            return (
+                                <div key={instance.id} className="border-b last:border-b-0">
+                                    <button
+                                        type="button"
+                                        onClick={() => toggle(instance.id)}
+                                        className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium hover:bg-accent"
+                                    >
+                                        <span className="truncate">{instance.name}</span>
+                                        {isExpanded ? (
+                                            <ChevronUp className="size-4 shrink-0" />
+                                        ) : (
+                                            <ChevronDown className="size-4 shrink-0" />
+                                        )}
+                                    </button>
+                                    {isExpanded && (
+                                        <div className="px-4 pb-3 flex flex-col gap-2">
+                                            <button
+                                                type="button"
+                                                className="text-sm text-muted-foreground self-center hover:underline"
+                                            >
+                                                {"< details >"}
+                                            </button>
+                                            <label className="flex items-center gap-2 text-sm">
+                                                <input type="checkbox" />
+                                                options
+                                            </label>
+                                            <label className="flex items-center gap-2 text-sm">
+                                                <input type="checkbox" />
+                                                options
+                                            </label>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <button
+                        type="button"
+                        onClick={add}
+                        className="text-sm text-muted-foreground hover:underline self-start"
+                    >
+                        + Add instance
+                    </button>
+                </div> */}
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 w-full lg:w-9/12 content-start">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="aspect-video rounded-xl border"
+                        />
+                    ))}
                 </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {stats.map((stat) => (
-                    <Card key={stat.label}>
-                        <CardHeader>
-                            <CardDescription>{stat.label}</CardDescription>
-                            <CardTitle className="text-2xl">{stat.value}</CardTitle>
-                        </CardHeader>
-                    </Card>
-                ))}
-            </div>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle>Welcome back</CardTitle>
-                    <CardDescription>
-                        This is a sample home page. Build on top of it.
-                    </CardDescription>
-                    <CardAction>
-                        <Button variant="outline">Refresh</Button>
-                    </CardAction>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-sm text-muted-foreground">
-                        Replace this content with your actual dashboard widgets, tables,
-                        or charts.
-                    </p>
-                </CardContent>
-                <CardFooter>
-                    <Button>Get Started</Button>
-                </CardFooter>
-            </Card>
-
-            <div>
-                <pre>
-                    {JSON.stringify(instances, null, 2)}
-                </pre>
-                <Button onClick={add}>Add</Button>
             </div>
         </div>
     )
